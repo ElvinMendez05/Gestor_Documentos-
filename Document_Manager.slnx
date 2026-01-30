@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Application/">
+    <Project Path="Document_Manager.Application/Document_Manager.Application.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Document_Manager.Domain/Document_Manager.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Document_Manager.Infrastructure/Document_Manager.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/Web/">
+    <Project Path="Document_Manager.Web/Document_Manager.Web.csproj" />
+  </Folder>
+</Solution>

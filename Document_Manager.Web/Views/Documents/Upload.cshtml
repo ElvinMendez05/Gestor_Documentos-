@@ -1,0 +1,67 @@
+﻿@model Document_Manager.Web.Models.UploadDocumentViewModel
+
+<style>
+    .upload-container {
+        max-width: 700px;
+        margin-top: 60px;
+    }
+
+    .card-upload {
+        border: 2px dashed #d1d1d1;
+        border-radius: 20px;
+        padding: 40px;
+        background-color: #f9f9ff;
+        text-align: center;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .card-upload:hover {
+            border-color: #5C5CFF;
+            background-color: #f0f0ff;
+        }
+
+    .upload-icon {
+        font-size: 3rem;
+        color: #5C5CFF;
+    }
+
+    .btn-upload {
+        background-color: #5C5CFF;
+        color: white;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 600;
+        border: none;
+    }
+</style>
+
+<div class="container upload-container">
+
+    <div class="mb-4 d-flex align-items-center">
+        <a asp-action="Index" class="btn btn-link text-dark me-3">
+            <i class="bi bi-arrow-left fs-4"></i>
+        </a>
+        <h2 class="fw-bold m-0">Subir Documento</h2>
+    </div>
+
+    <div class="card shadow-sm border-0 p-4 rounded-4">
+        <form asp-action="Upload" method="post" enctype="multipart/form-data">
+
+            <label class="card-upload mb-4 w-100">
+                <input type="file" asp-for="File" hidden accept="application/pdf" />
+                <div class="upload-icon mb-3">
+                    <i class="bi bi-cloud-arrow-up-fill"></i>
+                </div>
+                <h5>Selecciona tu archivo PDF</h5>
+                <p class="text-muted small">Solo PDF – Máx. 10MB</p>
+            </label>
+
+            <span asp-validation-for="File" class="text-danger"></span>
+
+            <button type="submit" class="btn btn-upload w-100 mt-3">
+                Confirmar y Subir
+            </button>
+        </form>
+    </div>
+</div>

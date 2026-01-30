@@ -1,0 +1,139 @@
+﻿@model List<Document_Manager.Application.DTOs.DocumentDto>
+
+@{
+    ViewData["Title"] = "Mis Documentos";
+}
+
+<style>
+    .card-document {
+        border: none;
+        border-radius: 16px;
+        transition: transform 0.2s ease;
+        overflow: hidden;
+        background-color: #fff;
+    }
+
+    .card-document:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn-view-pdf {
+        background-color: #5C5CFF;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 10px;
+        font-weight: 600;
+        transition: background 0.3s;
+    }
+
+    .btn-view-pdf:hover {
+        background-color: #4A4AE6;
+        color: white;
+    }
+
+    .doc-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 5px;
+    }
+
+    .doc-description {
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .pdf-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgba(0,0,0,.4), transparent);
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding: 12px;
+        pointer-events: none;
+    }
+
+    .pdf-overlay i {
+        font-size: 1.8rem;
+        color: #dc3545;
+        background: #fff;
+        padding: 6px;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <h2 class="fw-bold m-0">📄 Mis Documentos</h2>
+        <a asp-action="Upload" class="btn btn-view-pdf px-4 shadow-sm">
+            ➕ Subir nuevo
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-light text-center shadow-sm py-5 border-0"
+             style="border-radius: 15px;">
+            <h4 class="text-muted">¡Nada por aquí!</h4>
+            <p class="mb-0">Aún no has subido ningún documento.</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var doc in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4 mb-4">
+                    <div class="card card-document shadow-sm h-100">
+
+                        <!-- PDF Preview -->
+                        <div class="ratio ratio-4x3 position-relative">
+                            <iframe src="@($"{doc.FilePath}#page=1&toolbar=0&navpanes=0")"
+                                    title="@doc.FileName">
+                            </iframe>
+
+                            <div class="pdf-overlay">
+                                <i class="bi bi-file-earmark-pdf"></i>
+                            </div>
+                        </div>
+
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="doc-title text-truncate"
+                                title="@doc.FileName">
+                                @doc.FileName
+                            </h5>
+
+                            <p class="doc-description flex-grow-1">
+                                📅 Subido el @doc.CreatedAt.ToString("dd MMM yyyy")
+                            </p>
+
+                            <!-- Buttons -->
+                            <div class="d-flex gap-2 mt-3">
+                                <a href="@doc.FilePath"
+                                   target="_blank"
+                                   class="btn btn-view-pdf w-100">
+                                    Ver PDF
+                                </a>
+
+                                <form asp-action="Delete"
+                                      asp-route-id="@doc.Id"
+                                      method="post"
+                                      onsubmit="return confirm('¿Eliminar este documento?');">
+                                    <button type="submit"
+                                            class="btn btn-outline-danger">
+                                        🗑
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
