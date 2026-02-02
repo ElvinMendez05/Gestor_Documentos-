@@ -1,27 +1,34 @@
 ﻿using Document_Manager.Application.DTOs;
 using Document_Manager.Application.Interface;
+using Document_Manager.Domain.Entities;
 using Document_Manager.Web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Document_Manager.Web.Controllers
 {
+    
     public class DocumentsController : Controller
     {
         private readonly IDocumentService _documentService;
         private readonly IWebHostEnvironment _env;
+        private readonly UserManager<Users> _userManager;
 
         public DocumentsController(
             IDocumentService documentService,
-            IWebHostEnvironment env)
+            IWebHostEnvironment env,
+            UserManager<Users> userManager)
         {
             _documentService = documentService;
             _env = env;
+            _userManager = userManager;
         }
-
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = Guid.Parse("11111111-1111-1111-1111-111111111111"); // mock user
-            var documents = await _documentService.GetUserDocumentsAsync(userId);
+            var userId = _userManager.GetUserId(User);
+            var documents = await _documentService.GetUserDocumentsAsync(Guid.Parse(userId!));
             return View(documents);
         }
 
@@ -54,6 +61,9 @@ namespace Document_Manager.Web.Controllers
 
             var fileName = $"{Guid.NewGuid()}.pdf";
             var fullPath = Path.Combine(uploadsPath, fileName);
+            //to the user
+            var userId = Guid.Parse(_userManager.GetUserId(User));
+
 
             using var stream = new FileStream(fullPath, FileMode.Create);
             await model.File.CopyToAsync(stream);
@@ -62,7 +72,7 @@ namespace Document_Manager.Web.Controllers
             {
                 FileName = model.File.FileName,
                 FilePath = $"/uploads/documents/{fileName}",
-                UserId = Guid.Parse("11111111-1111-1111-1111-111111111111")
+                UserId = userId,
             };
 
             await _documentService.UploadAsync(dto);

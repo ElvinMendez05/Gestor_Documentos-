@@ -16,6 +16,267 @@
             --sidebar-hover: rgba(255, 255, 255, 0.08);
             --accent-color: #4e73df;
             --text-muted: #cfd3ff;
+            --divider-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow-x: hidden;
+        }
+
+        .app-wrapper {
+            display: flex;
+            min-height: 100vh;
+            background: #f4f6fb;
+        }
+
+        /* === SIDEBAR === */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, var(--sidebar-bg), #252540);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 25px 20px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            text-align: center;
+            letter-spacing: 1px;
+            border-bottom: 1px solid var(--divider-color);
+        }
+
+            .sidebar-header i {
+                margin-right: 8px;
+                color: var(--accent-color);
+            }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 15px 0;
+            margin: 0;
+        }
+
+        /* Subtítulos de sección en el sidebar */
+        .sidebar-label {
+            padding: 15px 25px 5px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 700;
+        }
+
+        .sidebar-divider {
+            height: 1px;
+            background: var(--divider-color);
+            margin: 15px 20px;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 25px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-size: 0.95rem;
+        }
+
+            .sidebar-menu li a i {
+                font-size: 1.2rem;
+            }
+
+            .sidebar-menu li a:hover {
+                background: var(--sidebar-hover);
+                color: #fff;
+                padding-left: 30px;
+            }
+
+            .sidebar-menu li a.active {
+                color: #fff;
+                background: var(--sidebar-hover);
+                border-left: 4px solid var(--accent-color);
+            }
+
+        /* === MAIN CONTENT === */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+        }
+
+        /* === TOP NAVBAR === */
+        .top-navbar {
+            height: 65px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+            .top-navbar .title {
+                font-weight: 600;
+                color: #374151;
+                font-size: 1.1rem;
+            }
+
+        /* === CONTENT AREA === */
+        .content-body {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .content-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            min-height: calc(100vh - 140px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-wrapper">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <i class="bi bi-file-earmark-pdf-fill"></i><span>DocManager</span>
+            </div>
+
+            <ul class="sidebar-menu">
+                <div class="sidebar-label">Principal</div>
+                <li>
+                    <a asp-controller="Home" asp-action="Index">
+                        <i class="bi bi-house-door"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+
+                @if (User.Identity.IsAuthenticated) 
+                {
+                    <li>
+                        <a asp-controller="Documents" asp-action="Index">
+                            <i class="bi bi-folder2-open"></i> <span>Mis documentos</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Documents" asp-action="Upload">
+                            <i class="bi bi-cloud-arrow-up"></i> <span>Subir PDF</span>
+                        </a>
+                    </li>
+
+                    <div class="sidebar-divider"></div>
+                    <div class="sidebar-label">Seguridad</div>
+
+                    <li>
+                        <a asp-controller="Auth" asp-action="ChangePassword">
+                            <i class="bi bi-shield-lock-fill"></i> <span>Cambiar Contraseña</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a asp-controller="Auth" asp-action="Logout">
+                            <i class="bi bi-box-arrow-left text-danger"></i> <span class="text-danger">Cerrar Sesión</span>
+                        </a>
+                    </li>
+                }
+                else
+                {
+                    <div class="sidebar-divider"></div>
+                    <div class="sidebar-label">Acceso</div>
+                    <li>
+                        <a asp-controller="Auth" asp-action="Login">
+                            <i class="bi bi-box-arrow-in-right"></i> <span>Iniciar Sesión</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Auth" asp-action="Register">
+                            <i class="bi bi-person-plus"></i> <span>Registrarse</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a asp-controller="Auth" asp-action="VerifyEmail">
+                            <i class="bi bi-key-fill"></i> <span>Recuperar Clave</span>
+                        </a>
+                    </li>
+                }
+
+                <div class="sidebar-divider"></div>
+                <li>
+                    <a asp-controller="Home" asp-action="Privacy">
+                        <i class="bi bi-shield-lock"></i> <span>Privacidad</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <div class="main-content">
+            
+            <nav class="top-navbar">
+                <span class="title">@ViewData["Title"]</span>
+
+                <div class="user-profile-sm d-flex align-items-center gap-2">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <span class="text-muted fw-medium" style="font-size: 0.9rem;">
+                            Hola, @User.Identity.Name
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="text-muted fw-medium" style="font-size: 0.9rem;">
+                            Invitado
+                        </span>
+                    }
+                    <i class="bi bi-person-circle fs-4 text-muted"></i>
+                </div>
+            </nav>
+
+            <main class="content-body">
+                <div class="content-card">
+                    @RenderBody()
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+
+@* <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DocManager</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Document_Manager.Web.styles.css" asp-append-version="true" />
+
+    <style>
+        :root {
+            --sidebar-bg: #1e1e2f;
+            --sidebar-hover: rgba(255, 255, 255, 0.08);
+            --accent-color: #4e73df;
+            --text-muted: #cfd3ff;
         }
 
         body {
@@ -163,6 +424,8 @@
                         <i class="bi bi-shield-lock"></i> <span>Seguridad</span>
                     </a>
                 </li>
+
+                //Implementa apartado de seccion de usario, register, login, forgot, verifyEmail
             </ul>
         </aside>
 
@@ -186,7 +449,7 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
-</html>
+</html> *@
 
 @* <!DOCTYPE html>
 <html lang="en">

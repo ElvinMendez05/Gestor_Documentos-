@@ -38,12 +38,20 @@
         position: relative;
         border: 2px dashed #e0e6ed;
         border-radius: 20px;
-        padding: 50px 20px;
+        /* Dropzone más ancho visualmente */
+            width: 100%;
+            padding: 70px 40px; /* más aire horizontal */
+        /* Reducir padding lateral solo para el área del upload */
         background-color: #f8faff;
         text-align: center;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         cursor: pointer;
         display: block;
+    }
+
+    .card-modern .dropzone-area {
+        margin-left: -10px;
+        margin-right: -10px;
     }
 
         .dropzone-area:hover {
@@ -144,7 +152,7 @@
                 <span asp-validation-for="File" class="text-danger small"></span>
             </div>
 
-            <button type="submit" class="btn btn-gradient w-100">
+            <button type="submit" class="btn btn-gradient w-100" onclick="alertModernClick()">
                 <i class="bi bi-rocket-takeoff me-2"></i> Comenzar Subida
             </button>
         </form>
@@ -152,8 +160,10 @@
 </div>
 
 @section Scripts {
-    <script>
-        const fileInput = document.getElementById('fileInput');
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
+   @*  Input funtion  *@
+    <script> const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('file-name-display');
         const fileNameSpan = document.getElementById('file-name');
         const uploadText = document.getElementById('uploadText');
@@ -172,7 +182,16 @@
                 mainIcon.className = 'bi bi-file-earmark-check-fill';
             }
         });
+
+            const alertModernClick = () => {
+            Swal.fire({
+                title:'Archivo subido correctamente!',
+                text: 'Has presionado el boton',
+                icon: 'success'
+            });
+        }
     </script>
+
 }
 
 @* @model Document_Manager.Web.Models.UploadDocumentViewModel
