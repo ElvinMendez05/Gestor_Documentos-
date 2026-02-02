@@ -2,7 +2,122 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .hero {
+        background: linear-gradient(135deg, #5C5CFF, #7A7AFF);
+        color: white;
+        border-radius: 18px;
+        padding: 50px;
+    }
+
+        .hero h1 {
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.05rem;
+            opacity: 0.95;
+        }
+
+    .btn-hero {
+        background: #fff;
+        color: #5C5CFF;
+        border-radius: 12px;
+        padding: 12px 22px;
+        font-weight: 700;
+        transition: all .3s;
+    }
+
+        .btn-hero:hover {
+            background: #f1f1ff;
+            transform: translateY(-2px);
+        }
+
+    .feature-card {
+        border: none;
+        border-radius: 16px;
+        padding: 28px;
+        transition: transform .2s ease;
+        background: #fff;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+        }
+
+    .feature-icon {
+        font-size: 2rem;
+        background: #f4f4ff;
+        color: #5C5CFF;
+        width: 55px;
+        height: 55px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- HERO -->
+    <div class="hero shadow-sm mb-5">
+        <h1>📄 Document Manager</h1>
+        <p class="mt-3">
+            Guarda, organiza y accede a tus documentos PDF de forma
+            segura y rápida desde cualquier lugar.
+        </p>
+
+        <div class="d-flex gap-3 mt-4 flex-wrap">
+            <a asp-controller="Documents"
+               asp-action="Upload"
+               class="btn btn-hero">
+                ➕ Subir PDF
+            </a>
+
+            <a asp-controller="Documents"
+               asp-action="Index"
+               class="btn btn-outline-light rounded-3 px-4">
+                📂 Mis documentos
+            </a>
+        </div>
+    </div>
+
+    <!-- FEATURES -->
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm h-100">
+                <div class="feature-icon">🔐</div>
+                <h5 class="fw-bold">Seguro</h5>
+                <p class="text-muted mb-0">
+                    Tus documentos están protegidos por usuario y
+                    solo tú puedes acceder a ellos.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm h-100">
+                <div class="feature-icon">⚡</div>
+                <h5 class="fw-bold">Rápido</h5>
+                <p class="text-muted mb-0">
+                    Sube y visualiza PDFs al instante sin
+                    complicaciones.
+                </p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-card shadow-sm h-100">
+                <div class="feature-icon">📂</div>
+                <h5 class="fw-bold">Organizado</h5>
+                <p class="text-muted mb-0">
+                    Mantén todos tus documentos en un solo
+                    lugar, siempre disponibles.
+                </p>
+            </div>
+        </div>
+    </div>
+
 </div>

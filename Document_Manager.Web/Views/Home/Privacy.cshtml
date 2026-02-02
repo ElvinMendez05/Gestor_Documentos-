@@ -1,6 +1,179 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Política de Privacidad";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<style>
+    :root {
+        --privacy-primary: #4f46e5;
+        --privacy-bg: #ffffff;
+        --text-main: #1f2937;
+        --text-muted: #6b7280;
+    }
+
+    .privacy-wrapper {
+        animation: fadeIn 0.8s ease-in-out;
+        max-width: 850px;
+        margin: 40px auto;
+    }
+
+    @@keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .privacy-card {
+        background: var(--privacy-bg);
+        border-radius: 24px;
+        border: none;
+        overflow: hidden;
+        position: relative;
+    }
+
+        /* Línea decorativa superior con gradiente */
+        .privacy-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #4f46e5, #9333ea);
+        }
+
+    .privacy-header {
+        padding: 50px 50px 20px 50px;
+    }
+
+    .privacy-body {
+        padding: 0 50px 50px 50px;
+    }
+
+    .privacy-card h1 {
+        font-weight: 800;
+        color: var(--text-main);
+        letter-spacing: -1px;
+        margin-top: 15px;
+    }
+
+    /* Estilo para las secciones */
+    .policy-section {
+        display: flex;
+        gap: 20px;
+        margin-top: 35px;
+        padding: 20px;
+        border-radius: 16px;
+        transition: background 0.3s;
+    }
+
+        .policy-section:hover {
+            background: #f8fafc;
+        }
+
+    .section-icon {
+        flex-shrink: 0;
+        width: 48px;
+        height: 48px;
+        background: #eef2ff;
+        color: var(--privacy-primary);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+    }
+
+    .section-content h4 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 8px;
+    }
+
+    .section-content p {
+        color: var(--text-muted);
+        line-height: 1.6;
+        margin-bottom: 0;
+        font-size: 0.95rem;
+    }
+
+    .badge-status {
+        background: #ecfdf5;
+        color: #059669;
+        padding: 6px 12px;
+        border-radius: 100px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+</style>
+
+<div class="container privacy-wrapper">
+    <div class="privacy-card shadow-lg">
+
+        <div class="privacy-header text-center text-md-start">
+            <span class="badge-status">Actualizado: Feb 2026</span>
+            <h1>@ViewData["Title"]</h1>
+            <p class="lead text-secondary mt-3">
+                En <strong>DocManager</strong>, la seguridad de tus archivos es nuestra máxima prioridad.
+                Entiende cómo protegemos tu información.
+            </p>
+        </div>
+
+        <div class="privacy-body">
+
+            <div class="policy-section">
+                <div class="section-icon">
+                    <i class="bi bi-info-circle"></i>
+                </div>
+                <div class="section-content">
+                    <h4>Información que recopilamos</h4>
+                    <p>Almacenamos exclusivamente los datos necesarios para tu perfil de acceso y los documentos PDF que decides gestionar en la nube. No rastreamos datos externos.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <div class="section-icon">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div class="section-content">
+                    <h4>Privacidad por Diseño</h4>
+                    <p>Cada documento cuenta con un identificador único vinculado a tu ID de usuario. Esto garantiza que tus archivos sean invisibles para cualquier otro miembro de la plataforma.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <div class="section-icon">
+                    <i class="bi bi-file-earmark-lock"></i>
+                </div>
+                <div class="section-content">
+                    <h4>Uso Ético de Documentos</h4>
+                    <p>Tu contenido te pertenece. Los archivos se procesan únicamente para permitirte previsualizarlos o descargarlos. Jamás compartiremos o venderemos tus datos a terceros.</p>
+                </div>
+            </div>
+
+            <div class="policy-section">
+                <div class="section-icon">
+                    <i class="bi bi-envelope-at"></i>
+                </div>
+                <div class="section-content">
+                    <h4>Soporte y Contacto</h4>
+                    <p>Si deseas eliminar tu cuenta o tienes consultas técnicas sobre el cifrado de datos, escribe directamente a nuestro equipo de seguridad.</p>
+                </div>
+            </div>
+
+            <div class="mt-5 pt-4 border-top text-center">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary px-4 rounded-pill">
+                    Entendido, volver al inicio
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>

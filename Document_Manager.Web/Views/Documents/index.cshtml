@@ -5,6 +5,272 @@
 }
 
 <style>
+    :root {
+        --accent-color: #6366f1;
+        --delete-color: #ef4444;
+        --card-bg: #ffffff;
+    }
+
+    /* Barra de búsqueda moderna */
+    .search-wrapper {
+        position: relative;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    .search-input {
+        padding: 12px 20px 12px 45px;
+        border-radius: 14px;
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        transition: all 0.3s;
+        font-size: 0.95rem;
+    }
+
+        .search-input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            outline: none;
+        }
+
+    .search-icon {
+        position: absolute;
+        left: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 1.2rem;
+    }
+
+    /* Grid y Tarjetas (Manteniendo tu estilo favorito) */
+    .document-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 1.5rem;
+    }
+
+    .card-document {
+        border: none;
+        border-radius: 20px;
+        background: var(--card-bg);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        animation: fadeInUp 0.5s ease backwards;
+    }
+
+        .card-document:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+    .preview-container {
+        height: 200px;
+        position: relative;
+        background: #f1f5f9;
+        overflow: hidden;
+    }
+
+        .preview-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            pointer-events: none;
+        }
+
+    .file-badge {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(4px);
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: var(--accent-color);
+    }
+
+    .doc-info {
+        padding: 1.25rem;
+    }
+
+    .doc-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1e293b;
+        display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .doc-meta {
+        font-size: 0.8rem;
+        color: #64748b;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .action-area {
+        padding: 0 1.25rem 1.25rem;
+        display: flex;
+        gap: 10px;
+    }
+
+    .btn-view {
+        background: var(--accent-color);
+        color: white;
+        border-radius: 10px;
+        flex-grow: 1;
+        font-weight: 600;
+        padding: 10px;
+        border: none;
+        transition: 0.2s;
+        text-decoration: none;
+    }
+
+        .btn-view:hover {
+            background: #4f46e5;
+            color: white;
+            transform: scale(1.02);
+        }
+
+    .btn-delete-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 10px;
+        background: #fee2e2;
+        color: var(--delete-color);
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: 0.2s;
+    }
+
+        .btn-delete-icon:hover {
+            background: var(--delete-color);
+            color: white;
+        }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="container mt-4">
+
+    <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-5">
+        <div>
+            <h1 class="fw-extrabold" style="color: #0f172a; letter-spacing: -1px;">Mis Documentos</h1>
+            <p class="text-muted m-0">Gestiona tus archivos PDF con facilidad.</p>
+        </div>
+
+        <div class="d-flex flex-column flex-sm-row gap-3 align-items-center">
+            <div class="search-wrapper">
+                <i class="bi bi-search search-icon"></i>
+                <input type="text" id="docSearch" class="form-control search-input" placeholder="Buscar por nombre...">
+            </div>
+
+            <a asp-action="Upload" class="btn btn-view px-4 py-2 w-100 w-sm-auto">
+                <i class="bi bi-plus-lg me-1"></i> Nuevo
+            </a>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 border rounded-4 bg-light">
+            <i class="bi bi-folder2-open display-1 text-muted"></i>
+            <h3 class="mt-3">Sin documentos</h3>
+            <a asp-action="Upload" class="btn btn-primary mt-2">Subir ahora</a>
+        </div>
+    }
+    else
+    {
+        <div class="document-grid" id="documentContainer">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                var doc = Model[i];
+                <div class="card-document shadow-sm doc-item" data-title="@doc.FileName.ToLower()" style="animation-delay: @(i * 0.05)s">
+
+                    <div class="preview-container">
+                        <span class="file-badge">PDF</span>
+                        <iframe src="@($"{doc.FilePath}#page=1&toolbar=0&navpanes=0")"></iframe>
+                    </div>
+
+                    <div class="doc-info">
+                        <span class="doc-title" title="@doc.FileName">@doc.FileName</span>
+                        <div class="doc-meta">
+                            <i class="bi bi-calendar3"></i> @doc.CreatedAt.ToString("dd MMM, yyyy")
+                        </div>
+                    </div>
+
+                    <div class="action-area">
+                        <a href="@doc.FilePath" target="_blank" class="btn btn-view text-center">
+                            <i class="bi bi-eye"></i>
+                        </a>
+
+                        <form asp-action="Delete" asp-route-id="@doc.Id" method="post"
+                              onsubmit="return confirm('¿Eliminar documento?');">
+                            <button type="submit" class="btn btn-delete-icon">
+                                <i class="bi bi-trash3"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div id="noResults" class="text-center py-5" style="display: none;">
+            <i class="bi bi-search text-muted display-4"></i>
+            <p class="text-secondary mt-3">No encontramos documentos que coincidan con tu búsqueda.</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.getElementById('docSearch').addEventListener('input', function(e) {
+            const term = e.target.value.toLowerCase();
+            const docs = document.querySelectorAll('.doc-item');
+            let hasResults = false;
+
+            docs.forEach(doc => {
+                const title = doc.getAttribute('data-title');
+                if (title.includes(term)) {
+                    doc.style.display = 'flex';
+                    hasResults = true;
+                } else {
+                    doc.style.display = 'none';
+                }
+            });
+
+            // Mostrar mensaje si no hay resultados
+            document.getElementById('noResults').style.display = hasResults ? 'none' : 'block';
+        });
+    </script>
+}
+
+@* @model List<Document_Manager.Application.DTOs.DocumentDto>
+
+@{
+    ViewData["Title"] = "Mis Documentos";
+}
+
+<style>
     .card-document {
         border: none;
         border-radius: 16px;
@@ -62,6 +328,32 @@
         padding: 6px;
         border-radius: 8px;
     }
+
+    .btn-delete-modern {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        border: none;
+        background: #fff;
+        color: #dc3545;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 10px rgba(220,53,69,0.15);
+        transition: all 0.25s ease;
+    }
+
+        .btn-delete-modern:hover {
+            background: #dc3545;
+            color: #fff;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(220,53,69,0.35);
+        }
+
+        .btn-delete-modern:active {
+            transform: scale(0.95);
+        }
 </style>
 
 <div class="container mt-4">
@@ -123,10 +415,13 @@
                                       asp-route-id="@doc.Id"
                                       method="post"
                                       onsubmit="return confirm('¿Eliminar este documento?');">
+
                                     <button type="submit"
-                                            class="btn btn-outline-danger">
-                                        🗑
+                                            class="btn btn-delete-modern"
+                                            title="Eliminar documento">
+                                        <span>🗑</span>
                                     </button>
+
                                 </form>
                             </div>
                         </div>
@@ -137,3 +432,4 @@
         </div>
     }
 </div>
+ *@
