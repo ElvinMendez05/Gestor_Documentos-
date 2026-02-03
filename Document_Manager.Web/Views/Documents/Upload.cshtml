@@ -3,20 +3,24 @@
 <style>
     :root {
         --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        --soft-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --soft-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+        --border-soft: 1px solid rgba(255,255,255,0.6);
+    }
+
+    body {
+        background: #f4f6fb;
     }
 
     .upload-container {
-        max-width: 600px;
-        margin: 40px auto;
+        max-width: 900px;
+        margin: 60px auto;
         animation: fadeInUp 0.6s ease-out;
     }
 
-    /* Animación de entrada */
     @@keyframes fadeInUp {
         from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(25px);
         }
 
         to {
@@ -26,44 +30,37 @@
     }
 
     .card-modern {
-        background: #ffffff;
-        border: none;
-        border-radius: 24px;
+        background: rgba(255,255,255,0.9);
+        backdrop-filter: blur(14px);
+        border-radius: 26px;
         box-shadow: var(--soft-shadow);
-        overflow: hidden;
+        border: var(--border-soft);
     }
 
-    /* Área de Dropzone */
+    /* DROPZONE */
     .dropzone-area {
-        position: relative;
-        border: 2px dashed #e0e6ed;
-        border-radius: 20px;
-        /* Dropzone más ancho visualmente */
-            width: 100%;
-            padding: 70px 40px; /* más aire horizontal */
-        /* Reducir padding lateral solo para el área del upload */
-        background-color: #f8faff;
-        text-align: center;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px dashed #d6dbea;
+        border-radius: 22px;
+        padding: 70px 50px;
+        background: linear-gradient(180deg, #fbfcff, #f6f8ff);
+        transition: all .3s ease;
         cursor: pointer;
-        display: block;
-    }
-
-    .card-modern .dropzone-area {
-        margin-left: -10px;
-        margin-right: -10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
     }
 
         .dropzone-area:hover {
             border-color: #764ba2;
-            background-color: #f1f4ff;
-            transform: translateY(-2px);
+            background: #eef1ff;
+            transform: translateY(-3px);
         }
 
         .dropzone-area.file-selected {
-            border-style: solid;
             border-color: #2ecc71;
-            background-color: #f0fff4;
+            background: #f0fff4;
         }
 
     .upload-icon-wrapper {
@@ -74,77 +71,89 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
-        box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+        margin-bottom: 20px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
         color: #667eea;
         font-size: 2.2rem;
-        transition: 0.3s;
+        transition: .3s;
     }
 
     .dropzone-area:hover .upload-icon-wrapper {
         background: var(--primary-gradient);
         color: white;
-        transform: scale(1.1);
+        transform: scale(1.12);
     }
 
-    /* Botón Brillante */
+    h2 {
+        letter-spacing: -0.5px;
+    }
+
     .btn-gradient {
         background: var(--primary-gradient);
         color: white;
         border: none;
-        border-radius: 12px;
-        padding: 16px;
+        border-radius: 14px;
+        padding: 18px;
         font-weight: 600;
-        letter-spacing: 0.5px;
-        transition: all 0.3s;
-        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        font-size: 1rem;
+        transition: .3s;
+        box-shadow: 0 6px 20px rgba(102,126,234,.4);
     }
 
         .btn-gradient:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
-            color: white;
-            filter: brightness(1.1);
+            box-shadow: 0 12px 30px rgba(102,126,234,.6);
         }
 
-    /* Feedback de archivo seleccionado */
     #file-name-display {
         display: none;
-        margin-top: 10px;
+        margin-top: 14px;
         color: #2ecc71;
         font-weight: 600;
-        font-size: 0.9rem;
     }
 </style>
 
 <div class="container upload-container">
 
     <div class="mb-4">
-        <a asp-action="Index" class="text-decoration-none text-muted small fw-bold">
-            <i class="bi bi-chevron-left"></i> VOLVER AL LISTADO
+        <a asp-action="Index" class="text-decoration-none text-muted fw-semibold small">
+            <i class="bi bi-arrow-left-short"></i> Volver a documentos
         </a>
     </div>
 
-    <div class="card-modern p-4 p-md-5">
+    <div class="card-modern p-5">
+
         <div class="text-center mb-5">
-            <h2 class="fw-bold" style="color: #2d3748;">Subir Documento</h2>
-            <p class="text-secondary">Digitaliza tus archivos en segundos</p>
+            <h2 class="fw-bold text-dark">Subir Documento</h2>
+            <p class="text-muted">
+                Carga y gestiona tus archivos PDF de forma segura
+            </p>
         </div>
 
         <form asp-action="Upload" method="post" enctype="multipart/form-data">
 
-            <label class="dropzone-area mb-2" id="dropzone">
-                <input type="file" asp-for="File" id="fileInput" hidden accept="application/pdf" />
+            <label class="dropzone-area mb-3" id="dropzone">
+                <input type="file"
+                       asp-for="File"
+                       id="fileInput"
+                       hidden
+                       accept="application/pdf" />
 
                 <div class="upload-icon-wrapper">
-                    <i class="bi bi-cloud-plus" id="mainIcon"></i>
+                    <i class="bi bi-cloud-arrow-up-fill" id="mainIcon"></i>
                 </div>
 
-                <h5 class="fw-bold mb-1" id="uploadText">Arrastra o selecciona un PDF</h5>
-                <p class="text-muted small mb-0">Formato permitido: PDF (Máx. 10MB)</p>
+                <h5 class="fw-bold mb-2" id="uploadText">
+                    Arrastra tu archivo o haz clic para seleccionar
+                </h5>
+
+                <p class="text-muted small mb-0">
+                    Solo archivos PDF · Máx. 10MB
+                </p>
 
                 <div id="file-name-display">
-                    <i class="bi bi-check-circle-fill"></i> <span id="file-name"></span>
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span id="file-name"></span>
                 </div>
             </label>
 
@@ -152,113 +161,221 @@
                 <span asp-validation-for="File" class="text-danger small"></span>
             </div>
 
-            <button type="submit" class="btn btn-gradient w-100" onclick="alertModernClick()">
-                <i class="bi bi-rocket-takeoff me-2"></i> Comenzar Subida
-            </button>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-gradient w-100">
+                    <i class="bi bi-upload me-2"></i> Subir Documento
+                </button>
+            </div>
+
         </form>
     </div>
 </div>
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        
-   @*  Input funtion  *@
-    <script> const fileInput = document.getElementById('fileInput');
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
         const fileNameDisplay = document.getElementById('file-name-display');
         const fileNameSpan = document.getElementById('file-name');
         const uploadText = document.getElementById('uploadText');
         const dropzone = document.getElementById('dropzone');
         const mainIcon = document.getElementById('mainIcon');
 
-        fileInput.addEventListener('change', function() {
-            if (this.files && this.files.length > 0) {
-                const name = this.files[0].name;
-                fileNameSpan.textContent = name;
-
-                // Cambios visuales de "Éxito"
+        fileInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                fileNameSpan.textContent = this.files[0].name;
                 fileNameDisplay.style.display = 'block';
                 uploadText.style.display = 'none';
                 dropzone.classList.add('file-selected');
                 mainIcon.className = 'bi bi-file-earmark-check-fill';
             }
         });
-
-            const alertModernClick = () => {
-            Swal.fire({
-                title:'Archivo subido correctamente!',
-                text: 'Has presionado el boton',
-                icon: 'success'
-            });
-        }
     </script>
-
 }
+
 
 @* @model Document_Manager.Web.Models.UploadDocumentViewModel
 
 <style>
-    .upload-container {
-        max-width: 700px;
-        margin-top: 60px;
+    :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --soft-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+        --border-soft: 1px solid rgba(255,255,255,0.6);
     }
 
-    .card-upload {
-        border: 2px dashed #d1d1d1;
-        border-radius: 20px;
-        padding: 40px;
-        background-color: #f9f9ff;
+    body {
+        background: #f4f6fb;
+    }
+
+    .upload-container {
+        max-width: 900px;
+        margin: 60px auto;
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    @@keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(25px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card-modern {
+        background: rgba(255,255,255,0.85);
+        backdrop-filter: blur(14px);
+        border-radius: 26px;
+        box-shadow: var(--soft-shadow);
+        border: var(--border-soft);
+    }
+
+    /* Dropzone */
+    .dropzone-area {
+        border: 2px dashed #d6dbea;
+        border-radius: 22px;
+        padding: 90px 60px;
+        background: linear-gradient(180deg, #fbfcff, #f6f8ff);
         text-align: center;
+        transition: all .3s ease;
         cursor: pointer;
+    }
+
+        .dropzone-area:hover {
+            border-color: #764ba2;
+            background: #eef1ff;
+            transform: translateY(-3px);
+        }
+
+        .dropzone-area.file-selected {
+            border-color: #2ecc71;
+            background: #f0fff4;
+        }
+
+    .upload-icon-wrapper {
+        width: 90px;
+        height: 90px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 25px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        color: #667eea;
+        font-size: 2.6rem;
         transition: .3s;
     }
 
-        .card-upload:hover {
-            border-color: #5C5CFF;
-            background-color: #f0f0ff;
-        }
-
-    .upload-icon {
-        font-size: 3rem;
-        color: #5C5CFF;
+    .dropzone-area:hover .upload-icon-wrapper {
+        background: var(--primary-gradient);
+        color: white;
+        transform: scale(1.12);
     }
 
-    .btn-upload {
-        background-color: #5C5CFF;
+    h2 {
+        letter-spacing: -0.5px;
+    }
+
+    .btn-gradient {
+        background: var(--primary-gradient);
         color: white;
-        border-radius: 10px;
-        padding: 14px;
-        font-weight: 600;
         border: none;
+        border-radius: 14px;
+        padding: 18px;
+        font-weight: 600;
+        font-size: 1rem;
+        transition: .3s;
+        box-shadow: 0 6px 20px rgba(102,126,234,.4);
+    }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(102,126,234,.6);
+        }
+
+    #file-name-display {
+        display: none;
+        margin-top: 14px;
+        color: #2ecc71;
+        font-weight: 600;
     }
 </style>
 
 <div class="container upload-container">
 
-    <div class="mb-4 d-flex align-items-center">
-        <a asp-action="Index" class="btn btn-link text-dark me-3">
-            <i class="bi bi-arrow-left fs-4"></i>
+    <div class="mb-4">
+        <a asp-action="Index" class="text-decoration-none text-muted fw-semibold small">
+            <i class="bi bi-arrow-left-short"></i> Volver a documentos
         </a>
-        <h2 class="fw-bold m-0">Subir Documento</h2>
     </div>
 
-    <div class="card shadow-sm border-0 p-4 rounded-4">
+    <div class="card-modern p-5">
+
+        <div class="text-center mb-5">
+            <h2 class="fw-bold text-dark">Subir Documento</h2>
+            <p class="text-muted">Carga y gestiona tus archivos PDF de forma segura</p>
+        </div>
+
         <form asp-action="Upload" method="post" enctype="multipart/form-data">
 
-            <label class="card-upload mb-4 w-100">
-                <input type="file" asp-for="File" hidden accept="application/pdf" />
-                <div class="upload-icon mb-3">
-                    <i class="bi bi-cloud-arrow-up-fill"></i>
+            <label class="dropzone-area mb-3" id="dropzone">
+                <input type="file" asp-for="File" id="fileInput" hidden accept="application/pdf" />
+
+                <div class="upload-icon-wrapper">
+                    <i class="bi bi-cloud-arrow-up-fill" id="mainIcon"></i>
                 </div>
-                <h5>Selecciona tu archivo PDF</h5>
-                <p class="text-muted small">Solo PDF – Máx. 10MB</p>
+
+                <h5 class="fw-bold mb-2" id="uploadText">
+                    Arrastra tu archivo o haz clic para seleccionar
+                </h5>
+
+                <p class="text-muted small">
+                    Solo archivos PDF · Máx. 10MB
+                </p>
+
+                <div id="file-name-display">
+                    <i class="bi bi-check-circle-fill"></i>
+                    <span id="file-name"></span>
+                </div>
             </label>
 
-            <span asp-validation-for="File" class="text-danger"></span>
+            <div class="text-center mb-4">
+                <span asp-validation-for="File" class="text-danger small"></span>
+            </div>
 
-            <button type="submit" class="btn btn-upload w-100 mt-3">
-                Confirmar y Subir
+            <button type="submit" class="btn btn-gradient w-100">
+                <i class="bi bi-upload me-2"></i> Subir Documento
             </button>
+
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const fileNameSpan = document.getElementById('file-name');
+        const uploadText = document.getElementById('uploadText');
+        const dropzone = document.getElementById('dropzone');
+        const mainIcon = document.getElementById('mainIcon');
+
+        fileInput.addEventListener('change', function () {
+            if (this.files.length > 0) {
+                fileNameSpan.textContent = this.files[0].name;
+                fileNameDisplay.style.display = 'block';
+                uploadText.style.display = 'none';
+                dropzone.classList.add('file-selected');
+                mainIcon.className = 'bi bi-file-earmark-check-fill';
+            }
+        });
+    </script>
+}
  *@

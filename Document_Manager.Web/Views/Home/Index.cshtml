@@ -110,27 +110,58 @@
 <div class="container my-4">
 
     <!-- HERO -->
-    <div class="hero mb-5">
-        <h1>Document Manager</h1>
-        <p class="mt-3">
-            Gestiona tus documentos PDF de forma segura, rápida
-            y organizada desde un solo lugar.
-        </p>
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="hero mb-5">
+            <h1>Document Manager</h1>
+            <p class="mt-3">
+                Gestiona tus documentos PDF de forma segura, rápida
+                y organizada desde un solo lugar.
+            </p>
+
+
+            <div class="d-flex gap-3 mt-4 flex-wrap">
+                <a asp-controller="Documents"
+                asp-action="Upload"
+                asp-action="Upload"
+                class="btn btn-hero">
+                    Subir documento
+                </a>
+
+                <a asp-controller="Documents"
+                asp-action="Index"
+                class="btn btn-outline-light rounded-3 px-4 text-center">
+                    Ver documentos
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+
+        <div class="hero mb-5">
+            <h1>Document Manager</h1>
+            <p class="mt-3">
+                Gestiona tus documentos PDF de forma segura, rápida
+                y organizada desde un solo lugar.
+            </p>
 
         <div class="d-flex gap-3 mt-4 flex-wrap">
-            <a asp-controller="Documents"
-               asp-action="Upload"
-               class="btn btn-hero">
+            <a asp-controller="Auth"
+            asp-action="Login"
+            class="btn btn-hero">
                 Subir documento
             </a>
 
-            <a asp-controller="Documents"
-               asp-action="Index"
-               class="btn btn-outline-light rounded-3 px-4">
+            <a asp-controller="Auth"
+            asp-action="Login"
+            class="btn btn-outline-light rounded-3 px-4 text-center">
                 Ver documentos
             </a>
         </div>
-    </div>
+</div> 
+    
+    }
 
     <!-- STATS -->
     <div class="row g-4 mb-5">

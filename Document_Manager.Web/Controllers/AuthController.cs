@@ -1,6 +1,5 @@
 ﻿using Document_Manager.Domain.Entities;
 using Document_Manager.Web.Models.AuthViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -158,7 +157,5 @@ namespace Document_Manager.Web.Controllers
             await signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
         }
-
-
     }
 }
