@@ -1,0 +1,58 @@
+﻿@{
+    ViewData["Title"] = "Cerrando sesión";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    .logout-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .logout-card {
+        background: white;
+        padding: 50px;
+        border-radius: 20px;
+        text-align: center;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        max-width: 420px;
+        width: 100%;
+    }
+
+    .logout-icon {
+        font-size: 3rem;
+        color: var(--accent-color);
+        margin-bottom: 20px;
+    }
+
+    .spinner-border {
+        width: 3rem;
+        height: 3rem;
+        margin-top: 25px;
+    }
+</style>
+
+<div class="logout-wrapper">
+    <div class="logout-card">
+        <div class="logout-icon">
+            <i class="bi bi-box-arrow-left"></i>
+        </div>
+
+        <h3 class="fw-bold mb-2">Cerrando sesión</h3>
+        <p class="text-muted">
+            Estamos cerrando tu sesión de forma segura.
+        </p>
+
+        <div class="spinner-border text-primary" role="status"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        setTimeout(() => {
+            window.location.href = '@Url.Action("Index", "Home")';
+        }, 2000);
+    </script>
+}

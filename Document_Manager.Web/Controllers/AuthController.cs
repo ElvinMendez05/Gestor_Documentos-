@@ -152,10 +152,15 @@ namespace Document_Manager.Web.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult LoggedOut()
+        {
+            return View();
+        }
         public async Task<IActionResult> Logout()
         {
             await signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("LoggedOut");
         }
     }
 }

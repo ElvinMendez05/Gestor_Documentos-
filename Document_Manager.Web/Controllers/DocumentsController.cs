@@ -24,13 +24,45 @@ namespace Document_Manager.Web.Controllers
             _env = env;
             _userManager = userManager;
         }
+
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var documents = await _documentService.GetUserDocumentsAsync(Guid.Parse(userId!));
-            return View(documents);
+            var userIdString = _userManager.GetUserId(User);
+
+            if (!Guid.TryParse(userIdString, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var documents = await _documentService.GetUserDocumentsAsync(userId)
+                            ?? new List<DocumentDto>();
+
+           return View(documents);
         }
+
+            //public async Task<IActionResult> Index()
+            //{
+            //    var userIdString = _userManager.GetUserId(User);
+
+            //    if (!Guid.TryParse(userIdString, out var userId))
+            //    {
+            //        return Unauthorized();
+            //    }
+
+            //    var documents = await _documentService.GetUserDocumentsAsync(userId)
+            //                    ?? new List<DocumentDto>();
+
+            //    return View(documents);
+            //}
+
+
+            //public async Task<IActionResult> Index()
+            //{
+            //    var userId = _userManager.GetUserId(User);
+            //    var documents = await _documentService.GetUserDocumentsAsync(Guid.Parse(userId!));
+            //    return View(documents);
+            //}
 
         [HttpGet]
         public IActionResult Upload()
