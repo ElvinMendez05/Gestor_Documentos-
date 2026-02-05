@@ -1,4 +1,6 @@
-﻿using Document_Manager.Domain.Interface;
+﻿using Document_Manager.Application.Interface;
+using Document_Manager.Application.Service;
+using Document_Manager.Domain.Interface;
 using Document_Manager.Infrastructure.Persistence;
 using Document_Manager.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +20,7 @@ namespace Document_Manager.Infrastructure.DependencyInjection
                     configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<IDocumentRepository, DocumentRepository>();
+            services.AddScoped<IEmailService, EmailService>();
 
             return services;
         }

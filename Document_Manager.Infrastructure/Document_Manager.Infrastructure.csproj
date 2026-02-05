@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Document_Manager.Application\Document_Manager.Application.csproj" />
     <ProjectReference Include="..\Document_Manager.Domain\Document_Manager.Domain.csproj" />
   </ItemGroup>
 
