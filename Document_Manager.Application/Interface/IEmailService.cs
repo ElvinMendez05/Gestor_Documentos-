@@ -6,6 +6,6 @@ namespace Document_Manager.Application.Interface
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string to, string subject, string body);
+        Task SendAsync(string to, string subject, string body);
     }
 }

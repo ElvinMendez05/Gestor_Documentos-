@@ -2,9 +2,6 @@
 using Document_Manager.Application.Interface;
 using Document_Manager.Domain.Entities;
 using Document_Manager.Domain.Interface;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Document_Manager.Application.Service
 {
