@@ -41,7 +41,7 @@ namespace Document_Manager.Web.Controllers
                 return View(model);
             }
 
-            // 🔴 SI EL EMAIL NO ESTÁ CONFIRMADO
+            // SI EL EMAIL NO ESTÁ CONFIRMADO
             if (!await userManager.IsEmailConfirmedAsync(user))
             {
                 // Generar nuevo token
@@ -164,6 +164,43 @@ namespace Document_Manager.Web.Controllers
             return View();
         }
 
+        //[HttpPost]
+        //public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //        return View(model);
+
+        //    var user = await userManager.FindByEmailAsync(model.Email!);
+
+        //    // No revelamos si existe o no (buena práctica)
+        //    if (user == null)
+        //        return View("VerifyEmailConfirmation");
+
+        //    var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        //    var encodedToken = WebUtility.UrlEncode(token);
+
+        //    var resetLink = Url.Action(
+        //        "ChangePassword",
+        //        "Auth",
+        //        new { email = user.Email, token = encodedToken },
+        //        Request.Scheme
+        //    );
+
+        //    var body = $@"
+        //            <h2>Restablecer contraseña</h2>
+        //            <p>Haz clic en el enlace para cambiar tu contraseña</p>
+        //            <a href='{resetLink}'>Cambiar contraseña</a>
+        //        ";
+
+        //    await emailService.SendAsync(
+        //        user.Email!,
+        //        "Restablecer contraseña",
+        //        body
+        //    );
+
+        //    return View("VerifyEmailConfirmation");
+        //}
+
         [HttpPost]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
@@ -172,29 +209,34 @@ namespace Document_Manager.Web.Controllers
 
             var user = await userManager.FindByEmailAsync(model.Email!);
 
-            // No revelamos si existe o no (buena práctica)
             if (user == null)
-                return View("VerifyEmailConfirmation");
+            {
+                ModelState.AddModelError("", "El correo no existe.");
+                return View(model);
+            }
 
+            // 🔑 GENERAR TOKEN DE RESET
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
             var encodedToken = WebUtility.UrlEncode(token);
 
-            var resetLink = Url.Action(
+            // 🔗 LINK CON TOKEN
+            var link = Url.Action(
                 "ChangePassword",
                 "Auth",
                 new { email = user.Email, token = encodedToken },
                 Request.Scheme
             );
 
-            var body = $@"
-                    <h2>Restablecer contraseña</h2>
-                    <p>Haz clic en el enlace para cambiar tu contraseña</p>
-                    <a href='{resetLink}'>Cambiar contraseña</a>
+            // ✉️ ENVIAR EMAIL
+                var body = $@"
+                    <h2>Recuperación de contraseña</h2>
+                    <p>Haz click en el botón para cambiar tu contraseña:</p>
+                    <a href='{link}'>Cambiar contraseña</a>
                 ";
 
             await emailService.SendAsync(
                 user.Email!,
-                "Restablecer contraseña",
+                "Recuperar contraseña",
                 body
             );
 
@@ -210,7 +252,7 @@ namespace Document_Manager.Web.Controllers
             return View(new ChangePasswordViewModel
             {
                 Email = email,
-                Token = token
+                Token = WebUtility.UrlDecode(token)
             });
         }
 
@@ -218,28 +260,133 @@ namespace Document_Manager.Web.Controllers
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("", "Datos inválidos.");
                 return View(model);
+            }
 
-            var user = await userManager.FindByEmailAsync(model.Email!);
+            var user = await userManager.FindByEmailAsync(model.Email);
+
             if (user == null)
-                return RedirectToAction("VerifyEmailConfirmation");
-
-            var decodedToken = WebUtility.UrlDecode(model.Token!);
+            {
+                ModelState.AddModelError("", "Usuario no encontrado.");
+                return View(model);
+            }
 
             var result = await userManager.ResetPasswordAsync(
                 user,
-                decodedToken,
-                model.NewPassword!
+                model.Token!,
+                model.NewPassword
             );
 
             if (result.Succeeded)
-                return RedirectToAction("Login");
+            {
+                TempData["Success"] = "Contraseña actualizada correctamente.";
+                return RedirectToAction("Login", "Auth");
+            }
 
             foreach (var error in result.Errors)
+            {
                 ModelState.AddModelError("", error.Description);
+            }
 
             return View(model);
         }
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        ModelState.AddModelError("", "Datos inválidos.");
+        //        return View(model);
+        //    }
+
+        //    var user = await userManager.FindByEmailAsync(model.Email!);
+
+        //    if (user == null)
+        //    {
+        //        ModelState.AddModelError("", "Usuario no encontrado.");
+        //        return View(model);
+        //    }
+
+        //    // ✅ USAR EL TOKEN QUE VIENE DEL FORM
+        //    var result = await userManager.ResetPasswordAsync(
+        //        user,
+        //        model.Token,
+        //        model.NewPassword!
+        //    );
+
+        //    if (result.Succeeded)
+        //    {
+        //        TempData["Success"] = "Contraseña actualizada correctamente.";
+        //        return RedirectToAction("Login", "Auth");
+        //    }
+
+        //    foreach (var error in result.Errors)
+        //    {
+        //        ModelState.AddModelError("", error.Description);
+        //    }
+
+        //    return View(model);
+        //}
+
+        //public IActionResult ChangePassword(string email, string token)
+        //{
+        //    if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(token))
+        //        return RedirectToAction("VerifyEmail");
+
+        //    return View(new ChangePasswordViewModel
+        //    {
+        //        Email = email,
+        //        Token = token
+        //    });
+        //}
+
+        //[HttpPost]
+        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        //{
+        //    if (!ModelState.IsValid)
+        //    {
+        //        foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+        //        {
+        //            Console.WriteLine(error.ErrorMessage);
+        //        }
+
+        //        ModelState.AddModelError("", "Datos inválidos.");
+        //        return View(model);
+        //    }
+
+        //    var user = await userManager.FindByEmailAsync(model.Email!);
+
+        //    if (user == null)
+        //    {
+        //        ModelState.AddModelError("", "Usuario no encontrado.");
+        //        return View(model);
+        //    }
+
+        //    var token = await userManager.GeneratePasswordResetTokenAsync(user);
+
+        //    var result = await userManager.ResetPasswordAsync(
+        //        user,
+        //        token,
+        //        model.NewPassword!
+        //    );
+
+        //    if (result.Succeeded)
+        //    {
+        //        TempData["Success"] = "Contraseña actualizada correctamente.";
+        //        return RedirectToAction("Login", "Auth");
+        //    }
+
+        //    // 👇 AQUÍ ESTABA EL PROBLEMA: no estabas viendo estos errores
+        //    foreach (var error in result.Errors)
+        //    {
+        //        ModelState.AddModelError("", error.Description);
+        //    }
+
+        //    return View(model);
+        //}
 
         // ---------- LOGOUT ----------
 

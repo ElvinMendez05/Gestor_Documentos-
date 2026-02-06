@@ -4,8 +4,6 @@ namespace Document_Manager.Web.Models.AuthViewModels
 {
     public class ChangePasswordViewModel
     {
-        //[Required(ErrorMessage = "Email is required.")]
-        //[EmailAddress]
         [Required(ErrorMessage = "El correo es obligatorio")]
         [EmailAddress(ErrorMessage = "Formato de correo inválido")]
         [RegularExpression(

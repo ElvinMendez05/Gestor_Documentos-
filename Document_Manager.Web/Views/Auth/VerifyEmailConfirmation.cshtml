@@ -1,0 +1,132 @@
+﻿@{
+    ViewData["Title"] = "Correo enviado";
+    Layout = "_AuthLayout";
+}
+
+<style>
+    /* ... (Todo tu CSS anterior igual) ... */
+
+    .main-screen {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        font-family: 'Inter', system-ui, -apple-system, sans-serif;
+        padding: 20px;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 50px 40px;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .icon-box {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 25px;
+    }
+
+    .check-mark {
+        background: #00d26a; /* Color para éxito */
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 10px 20px rgba(0, 210, 106, 0.3);
+        animation: scaleIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Clase nueva para el sobre en azul */
+    .mail-icon {
+        background: #007bff;
+        box-shadow: 0 10px 20px rgba(0, 123, 255, 0.3);
+    }
+
+    h1 {
+        color: #1e293b;
+        font-size: 28px;
+        font-weight: 800;
+        margin-bottom: 15px;
+        letter-spacing: -0.5px;
+    }
+
+    p {
+        color: #64748b;
+        font-size: 16px;
+        line-height: 1.6;
+        margin-bottom: 30px;
+    }
+
+    .divider {
+        height: 1px;
+        background: #f1f5f9;
+        margin-bottom: 30px;
+    }
+
+    .btn-modern {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        background: #007bff;
+        color: white;
+        text-decoration: none;
+        padding: 16px 20px;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 16px;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 15px rgba(0, 123, 255, 0.25);
+    }
+
+        .btn-modern:hover {
+            background: #0056b3;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 20px rgba(0, 123, 255, 0.35);
+        }
+
+    @@keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+
+<div class="main-screen">
+    <div class="glass-card">
+        <div class="icon-box">
+            <div class="check-mark mail-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+            </div>
+        </div>
+
+        <h1>Revisa tu correo 📩</h1>
+        <p>Si el correo existe en nuestro sistema, te hemos enviado un enlace para restablecer tu contraseña.</p>
+
+        <div class="divider"></div>
+
+        <a asp-controller="Home" asp-action="Index" class="btn-modern">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            <span>Volver al Inicio</span>
+        </a>
+    </div>
+</div>
