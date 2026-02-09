@@ -3,6 +3,7 @@ using Document_Manager.Application.Service;
 using Document_Manager.Domain.Entities;
 using Document_Manager.Infrastructure.DependencyInjection;
 using Document_Manager.Infrastructure.Persistence;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,6 +32,10 @@ builder.Services.AddIdentity<Users, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
+
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo(@"C:\DataProtection-Keys"))
+    .SetApplicationName("DocumentManager");
 
 
 var app = builder.Build();
